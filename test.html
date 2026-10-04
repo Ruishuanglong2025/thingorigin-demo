@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CubeTest</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow: hidden; font-family: 'Microsoft YaHei', sans-serif; }
+        #TOScene { width: 100vw; height: 100vh; display: block; }
+        #toolbar {
+            position: fixed; top: 20px; left: 20px; z-index: 100;
+            display: flex; gap: 12px; align-items: center;
+        }
+        #addCubeBtn {
+            padding: 10px 24px; font-size: 15px; font-weight: 600;
+            color: #fff; background: linear-gradient(135deg, #4a90e2, #357abd);
+            border: none; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(74, 144, 226, 0.4);
+        }
+        #addCubeBtn:hover { transform: translateY(-2px); }
+        #addCubeBtn:active { transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div id="TOScene"></div>
+    <button id="addCubeBtn" style="position:fixed;top:20px;left:20px;z-index:100;">➕ 创建立方体</button>
+    <script src="./ThingOrigin2.0.js"></script>
+    <script>
+        const TO= new ThingOrigin('TOScene', document.getElementById('TOScene'))
+        let scene = null;
+        function getScene() {
+            if (scene) return scene;
+            if (TO.scene && TO.scene.isScene) { scene = TO.scene; return scene; }
+            // 遍历 TO 的第一层属性
+            for (const k in TO) {
+                const v = TO[k];
+                if (v && v.isScene) { scene = v; return scene; }
+            }
+            return null;
+        }
+
+        // 3. 点击按钮：创建立方体
+        let count = 0;
+        document.getElementById('addCubeBtn').addEventListener('click', function () {
+            count++;
+
+            // 无参创建，让引擎用默认值
+            const cube = TO.model.initCube();
+
+            // 设置位置：沿 X 轴排开，高度 5
+            cube.position.set((count - 1) * 3 - 3, 5, 0);
+
+            // 加入场景（initCube 只创建对象，不自动加入）
+            const s = getScene();
+             if (s && !cube.parent) s.add(cube);
+        });
+    </script>
+</body>
+</html>
