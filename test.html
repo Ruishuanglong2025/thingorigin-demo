@@ -47,7 +47,7 @@
 
             // 无参创建，让引擎用默认值
             const cube = TO.model.initCube();
-
+            cube.material.color.setHex(0x00ff00);
             // 设置位置：沿 X 轴排开，高度 5
             cube.position.set((count - 1) * 3 - 3, 5, 0);
 
